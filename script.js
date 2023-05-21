@@ -1,25 +1,33 @@
 const choices = ['Rock', 'Paper', 'Scissors'];
 let playerScore = 0;
 let computerScore = 0;
+const selectionBtns = document.querySelectorAll('button');
+
+selectionBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        playRound(e.target.id, getComputerChoice());
+    })
+})
 
 function getComputerChoice(){
     const computerChoice = choices[Math.floor(Math.random() * choices.length)];
     return computerChoice;
 }
 
-function getPlayerChoice(){
-    let playerChoice = '';
-    let formattedPlayerChoice = '';
-    do {
-        playerChoice = prompt("Choose Rock, Paper, or Scissors");
-        formattedPlayerChoice = playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1).toLowerCase();
-    } while (!choices.includes(formattedPlayerChoice));
-    return formattedPlayerChoice;
-}
+// function getPlayerChoice(){
+//     let playerChoice = '';
+//     let formattedPlayerChoice = '';
+//     do {
+//         playerChoice = prompt("Choose Rock, Paper, or Scissors");
+//         formattedPlayerChoice = playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1).toLowerCase();
+//     } while (!choices.includes(formattedPlayerChoice));
+//     return formattedPlayerChoice;
+// }
 
 function playRound(playerSelection, computerSelection) {
+    document.querySelector('#choices').textContent = `You chose ${playerSelection}. Computer chose ${computerSelection}.`;
     if (playerSelection === computerSelection) {
-        return 'It\'s a tie!';
+        document.querySelector('#round-result').textContent = 'It\'s a tie!';
     }
     else if (
         (playerSelection === 'Rock' && computerSelection === 'Paper') || 
@@ -27,7 +35,7 @@ function playRound(playerSelection, computerSelection) {
         (playerSelection === 'Scissors' && computerSelection === 'Rock') 
     ){
         computerScore++;
-        return `You lose! ${computerSelection} beats ${playerSelection}.`;
+        document.querySelector('#round-result').textContent = `You lose! ${computerSelection} beats ${playerSelection}.`;
     }
     else if (
         (playerSelection === 'Rock' && computerSelection === 'Scissors') ||
@@ -35,30 +43,37 @@ function playRound(playerSelection, computerSelection) {
         (playerSelection === 'Scissors' && computerSelection === 'Paper')
     ) {
         playerScore++;
-        return `You win! ${playerSelection} beats ${computerSelection}`;
+        document.querySelector('#round-result').textContent = `You win! ${playerSelection} beats ${computerSelection}.`;
+    }
+    document.querySelector('#your-score').textContent = `You: ${playerScore} `;
+    document.querySelector('#computer-score').textContent = `Computer: ${computerScore}`;
+    if (playerScore === 5 || computerScore === 5) {
+        declareWinner();
     }
 }
 
 function declareWinner(){
     if (playerScore > computerScore) {
-        console.log('Congrats! You won the game.')
+        document.querySelector('#game-result').textContent = 'Congrats! You won the game.'
     }
     else if (computerScore > playerScore) {
-        console.log('Sorry! You lost the game.')
+        document.querySelector('#game-result').textContent = 'Sorry! You lost the game.'
     }
     else {
-        console.log('Womp womp...the game was a tie.')
+        document.querySelector('#game-result').textContent = 'Womp womp...the game was a tie.'
     }
+    playerScore = 0;
+    computerScore = 0;
 }
 
-function game() {
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = getPlayerChoice();
-        const computerSelection = getComputerChoice();
-        console.log(playRound(playerSelection, computerSelection))
-    }
-    console.log('Game over.');
-    declareWinner();
-}
+// function game() {
+//     // for (let i = 0; i < 5; i++) {
+//         const playerSelection = getPlayerChoice();
+//         const computerSelection = getComputerChoice();
+//         document.querySelector('#game-result' = playRound(playerSelection, computerSelection))
+//     // }
+//     document.querySelector('#game-result' = 'Game over.');
+//     declareWinner();
+// }
 
-game();
+// game();
